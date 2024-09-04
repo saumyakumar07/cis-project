@@ -1,14 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audit Result</title>
-</head>
-<body>
-    <h1>Audit Result</h1>
-    <p>{{ result }}</p>
-    <a href="/">Back</a>
-</body>
-</html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Audit Results</title>
+		<style>
+			/* Spinner styles */
+			.spinner {
+				display: none;
+				width: 50px;
+				height: 50px;
+				border: 8px solid #f3f3f3;
+				border-top: 8px solid #3498db;
+				border-radius: 50%;
+				animation: spin 1s linear infinite;
+				margin: auto;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+			}
 
+			@keyframes spin {
+				0% {
+					transform: rotate(0deg);
+				}
+				100% {
+					transform: rotate(360deg);
+				}
+			}
+
+			/* Overlay styles */
+			.overlay {
+				display: none;
+				position: fixed;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				background-color: rgba(0, 0, 0, 0.5);
+				z-index: 999;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="overlay" id="overlay">
+			<div class="spinner" id="spinner"></div>
+		</div>
+
+		<h1>Audit Results</h1>
+
+		<div id="results">
+			<!-- Display the audit results here -->
+			{% if results.error %}
+			<p>Error: {{ results.error }}</p>
+			{% else %}
+			<p>{{ results.root_login }}</p>
+			<p>{{ results.file_access }}</p>
+			<p>{{ results.bootloader_password }}</p>
+			<p>{{ results.firewall }}</p>
+			<p>{{ results.auditd }}</p>
+			<p>{{ results.login_logout }}</p>
+			<p>{{ results.password_delay }}</p>
+			{% endif %}
+		</div>
+
+		<script>
+			// Hide the spinner and overlay after results are loaded
+			document.getElementById('spinner').style.display = 'none';
+			document.getElementById('overlay').style.display = 'none';
+		</script>
+	</body>
+</html>
