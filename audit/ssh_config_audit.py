@@ -266,21 +266,21 @@ class SSHConfigAudit:
         else:
             return "Default user umask is less restrictive than 027."
 
-    def is_default_user_shell_timeout_900_seconds_or_less(self) -> bool:
-        cmd = "grep 'TMOUT' /etc/profile"
-        stdout, stderr = self._shellexec(cmd)
-        if stderr:
-            raise Exception(
-                f"Error checking shell timeout on {self.hostname}: {stderr}"
-            )
-        try:
-            timeout = int(stdout.strip().split("=")[1])
-        except ValueError:
-            return False
-        if timeout <= 900:
-            return "Default user shell timeout is 900 seconds or less."
-        else:
-            return "Default user shell timeout is more than 900 seconds."
+    # def is_default_user_shell_timeout_900_seconds_or_less(self) -> bool:
+    #     cmd = "grep 'TMOUT' /etc/profile"
+    #     stdout, stderr = self._shellexec(cmd)
+    #     if stderr:
+    #         raise Exception(
+    #             f"Error checking shell timeout on {self.hostname}: {stderr}"
+    #         )
+    #     try:
+    #         timeout = int(stdout.strip().split("=")[1])
+    #     except ValueError:
+    #         return False
+    #     if timeout <= 900:
+    #         return "Default user shell timeout is 900 seconds or less."
+    #     else:
+    #         return "Default user shell timeout is more than 900 seconds."
 
     def are_permissions_on_etc_passwd_configured(self) -> bool:
         cmd = "stat /etc/passwd"
@@ -378,17 +378,17 @@ class SSHConfigAudit:
         else:
             return "Permissions on /etc/gshadow- are not configured."
 
-    def are_no_world_writable_files(self) -> bool:
-        cmd = "find / -type f -perm -0002 ! -type l"
-        stdout, stderr = self._shellexec(cmd)
-        if stderr:
-            raise Exception(
-                f"Error checking world writable files on {self.hostname}: {stderr}"
-            )
-        if len(stdout.strip()) == 0:
-            return "No World writable files found"
-        else:
-            return "World Writable files found"
+    # def are_no_world_writable_files(self) -> bool:
+    #     cmd = "find / -type f -perm -0002 ! -type l"
+    #     stdout, stderr = self._shellexec(cmd)
+    #     if stderr:
+    #         raise Exception(
+    #             f"Error checking world writable files on {self.hostname}: {stderr}"
+    #         )
+    #     if len(stdout.strip()) == 0:
+    #         return "No World writable files found"
+    #     else:
+    #         return "World Writable files found"
 
     def are_no_unowned_files_or_directories(self) -> bool:
         cmd = "find / -nouser"
@@ -425,34 +425,34 @@ class SSHConfigAudit:
         else:
             return "Accounts in /etc/passwd do not use shadowed passwords"
 
-    def are_etc_shadow_password_fields_not_empty(self) -> bool:
-        shadow_entries = self._read_file("/etc/shadow")
-        for entry in shadow_entries:
-            fields = entry.split(":")
-            if len(fields) > 1 and fields[1] == "":
-                return "Empty password field found in /etc/shadow"
-        return "No empty password fields found in /etc/shadow"
+    # def are_etc_shadow_password_fields_not_empty(self) -> bool:
+    #     shadow_entries = self._read_file("/etc/shadow")
+    #     for entry in shadow_entries:
+    #         fields = entry.split(":")
+    #         if len(fields) > 1 and fields[1] == "":
+    #             return "Empty password field found in /etc/shadow"
+    #     return "No empty password fields found in /etc/shadow"
 
-    def do_all_groups_in_passwd_exist_in_group(self) -> bool:
-        passwd_entries = self._read_file("/etc/passwd")
-        group_entries = self._read_file("/etc/group")
-        groups_in_passwd = {entry.split(":")[3] for entry in passwd_entries}
-        groups_in_group = {entry.split(":")[0] for entry in group_entries}
+    # def do_all_groups_in_passwd_exist_in_group(self) -> bool:
+    #     passwd_entries = self._read_file("/etc/passwd")
+    #     group_entries = self._read_file("/etc/group")
+    #     groups_in_passwd = {entry.split(":")[3] for entry in passwd_entries}
+    #     groups_in_group = {entry.split(":")[0] for entry in group_entries}
 
-        if groups_in_passwd.issubset(groups_in_group):
-            return "All groups in /etc/passwd exist in /etc/group"
-        else:
-            return "Not all groups in /etc/passwd exist in /etc/group"
+    #     if groups_in_passwd.issubset(groups_in_group):
+    #         return "All groups in /etc/passwd exist in /etc/group"
+    #     else:
+    #         return "Not all groups in /etc/passwd exist in /etc/group"
 
-    def is_shadow_group_empty(self) -> bool:
-        cmd = "getent group shadow"
-        stdout, stderr = self._shellexec(cmd)
-        if stderr:
-            raise Exception(f"Error checking shadow group on {self.hostname}: {stderr}")
-        if "shadow:x:" in stdout and len(stdout.strip().split(":")[3]) == 0:
-            return "Shadow group is empty."
-        else:
-            return "Shadow group is not empty."
+    # def is_shadow_group_empty(self) -> bool:
+    #     cmd = "getent group shadow"
+    #     stdout, stderr = self._shellexec(cmd)
+    #     if stderr:
+    #         raise Exception(f"Error checking shadow group on {self.hostname}: {stderr}")
+    #     if "shadow:x:" in stdout and len(stdout.strip().split(":")[3]) == 0:
+    #         return "Shadow group is empty."
+    #     else:
+    #         return "Shadow group is not empty."
 
     def are_no_duplicate_uids(self) -> bool:
         cmd = "cut -d: -f3 /etc/passwd | sort | uniq -d"
@@ -502,27 +502,27 @@ class SSHConfigAudit:
         else:
             return "Duplicate group names found"
 
-    def is_root_path_integrity_ensured(self) -> bool:
-        cmd = "echo $PATH"
-        stdout, stderr = self._shellexec(cmd)
-        if stderr:
-            raise Exception(
-                f"Error checking root PATH integrity on {self.hostname}: {stderr}"
-            )
-        path_entries = stdout.strip().split(":")
-        return all("/bin" in path_entries and "/sbin" in path_entries)
+    # def is_root_path_integrity_ensured(self) -> bool:
+    #     cmd = "echo $PATH"
+    #     stdout, stderr = self._shellexec(cmd)
+    #     if stderr:
+    #         raise Exception(
+    #             f"Error checking root PATH integrity on {self.hostname}: {stderr}"
+    #         )
+    #     path_entries = stdout.strip().split(":")
+    #     return all("/bin" in path_entries and "/sbin" in path_entries)
 
-    def is_root_the_only_uid_0_account(self) -> bool:
-        cmd = "awk -F: '($3==0){print $1}' /etc/passwd"
-        stdout, stderr = self._shellexec(cmd)
-        if stderr:
-            raise Exception(
-                f"Error checking UID 0 accounts on {self.hostname}: {stderr}"
-            )
-        if stdout.strip() == "root":
-            return "Root is the only UID 0 account."
-        else:
-            return "There are other UID 0 accounts."
+    # def is_root_the_only_uid_0_account(self) -> bool:
+    #     cmd = "awk -F: '($3==0){print $1}' /etc/passwd"
+    #     stdout, stderr = self._shellexec(cmd)
+    #     if stderr:
+    #         raise Exception(
+    #             f"Error checking UID 0 accounts on {self.hostname}: {stderr}"
+    #         )
+    #     if stdout.strip() == "root":
+    #         return "Root is the only UID 0 account."
+    #     else:
+    #         return "There are other UID 0 accounts."
 
     def do_local_interactive_user_home_directories_exist(self) -> bool:
         cmd = "awk -F: '($3>=1000 && $3<65534){print $6}' /etc/passwd"
@@ -534,82 +534,36 @@ class SSHConfigAudit:
         home_dirs = stdout.strip().split("\n")
         return all(os.path.isdir(d) for d in home_dirs)
 
-    def do_local_interactive_users_own_their_home_directories(self) -> bool:
-        cmd = "awk -F: '($3>=1000 && $3<65534){print $6}' /etc/passwd"
-        stdout, stderr = self._shellexec(cmd)
-        if stderr:
-            raise Exception(
-                f"Error checking home directory ownership on {self.hostname}: {stderr}"
-            )
-        home_dirs = stdout.strip().split("\n")
-        for dir in home_dirs:
-            if os.stat(dir).st_uid != int(
-                self._shellexec(f"stat -c '%u' {dir}")[0].strip()
-            ):
-                return "Local interactive users do not own their home directories"
-        return "Local interactive users own their home directories"
+    # def do_local_interactive_users_own_their_home_directories(self) -> bool:
+    #     cmd = "awk -F: '($3>=1000 && $3<65534){print $6}' /etc/passwd"
+    #     stdout, stderr = self._shellexec(cmd)
+    #     if stderr:
+    #         raise Exception(
+    #             f"Error checking home directory ownership on {self.hostname}: {stderr}"
+    #         )
+    #     home_dirs = stdout.strip().split("\n")
+    #     for dir in home_dirs:
+    #         if os.stat(dir).st_uid != int(
+    #             self._shellexec(f"stat -c '%u' {dir}")[0].strip()
+    #         ):
+    #             return "Local interactive users do not own their home directories"
+    #     return "Local interactive users own their home directories"
 
-    def are_local_interactive_user_home_directories_mode_750_or_more_restrictive(
-        self,
-    ) -> bool:
-        cmd = "awk -F: '($3>=1000 && $3<65534){print $6}' /etc/passwd"
-        stdout, stderr = self._shellexec(cmd)
-        if stderr:
-            raise Exception(
-                f"Error checking home directory modes on {self.hostname}: {stderr}"
-            )
-        home_dirs = stdout.strip().split("\n")
-        for dir in home_dirs:
-            mode = oct(os.stat(dir).st_mode)[-3:]
-            if mode > "750":
-                return "Local interactive user home directories are not 750 or more restrictive"
-        return "Local interactive user home directories are 750 or more restrictive"
-
-    def do_local_interactive_users_have_no_netrc_files(self) -> bool:
-        cmd = "find /home -name '.netrc'"
-        stdout, stderr = self._shellexec(cmd)
-        if stderr:
-            raise Exception(f"Error checking .netrc files on {self.hostname}: {stderr}")
-        if len(stdout.strip()) == 0:
-            return "No .netrc files found"
-        else:
-            return ".netrc files found"
-
-    def do_local_interactive_users_have_no_forward_files(self) -> bool:
-        cmd = "find /home -name '.forward'"
-        stdout, stderr = self._shellexec(cmd)
-        if stderr:
-            raise Exception(
-                f"Error checking .forward files on {self.hostname}: {stderr}"
-            )
-        if len(stdout.strip()) == 0:
-            return "No .forward files found"
-        else:
-            return ".forward files found"
-
-    def do_local_interactive_users_have_no_rhosts_files(self) -> bool:
-        cmd = "find /home -name '.rhosts'"
-        stdout, stderr = self._shellexec(cmd)
-        if stderr:
-            raise Exception(
-                f"Error checking .rhosts files on {self.hostname}: {stderr}"
-            )
-        if len(stdout.strip()) == 0:
-            return "No .rhosts files found"
-        else:
-            return ".rhosts files found"
-
-    def are_local_interactive_user_dot_files_not_group_or_world_writable(self) -> bool:
-        cmd = "find /home -type f \( -name '.*' \) -perm -002 -o -perm -004"
-        stdout, stderr = self._shellexec(cmd)
-        if stderr:
-            raise Exception(
-                f"Error checking dot file permissions on {self.hostname}: {stderr}"
-            )
-        if len(stdout.strip()) == 0:
-            return "No dot files with group or world writable permissions found"
-        else:
-            return "Dot files with group or world writable permissions found"
+    # def are_local_interactive_user_home_directories_mode_750_or_more_restrictive(
+    #     self,
+    # ) -> bool:
+    #     cmd = "awk -F: '($3>=1000 && $3<65534){print $6}' /etc/passwd"
+    #     stdout, stderr = self._shellexec(cmd)
+    #     if stderr:
+    #         raise Exception(
+    #             f"Error checking home directory modes on {self.hostname}: {stderr}"
+    #         )
+    #     home_dirs = stdout.strip().split("\n")
+    #     for dir in home_dirs:
+    #         mode = oct(os.stat(dir).st_mode)[-3:]
+    #         if mode > "750":
+    #             return "Local interactive user home directories are not 750 or more restrictive"
+    #     return "Local interactive user home directories are 750 or more restrictive"
 
 
 def interpret_result(result_code: int, check_name: str) -> str:
