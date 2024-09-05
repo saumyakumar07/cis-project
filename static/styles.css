@@ -1,0 +1,122 @@
+/* General Styles */
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	background-color: #f0f2f5;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	display: flex;
+	height: 100vh;
+}
+
+/* Container for the background image */
+.background-container {
+	position: relative;
+	flex: 1;
+	background-image: url('/gradient-wireframe-background_23-2148993324.avif'); /* Replace with your image URL */
+	background-size: cover;
+	background-position: center;
+	height: 100%;
+	width: 50%; /* Cover half of the screen */
+}
+
+/* Container for the form and title */
+.form-container {
+	background-color: #fff;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	width: 320px; /* Form width */
+	text-align: center;
+	animation: fadeIn 1s ease-in-out;
+	box-sizing: border-box;
+	position: relative;
+	margin: 20px; /* Space around the form */
+}
+
+/* Title Style */
+h1 {
+	font-size: 2rem;
+	color: #333;
+	margin-bottom: 20px;
+	padding-bottom: 10px;
+	border-bottom: 2px solid #e3f2fd;
+	animation: slideDown 1s ease-in-out;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* Form Styles */
+form {
+	margin-top: 20px;
+}
+
+label {
+	font-size: 1rem;
+	color: #333;
+	margin-bottom: 5px;
+	display: inline-block;
+	text-align: left;
+	width: 100%;
+	font-weight: 600; /* Semibold */
+	box-sizing: border-box;
+}
+
+input[type='text'],
+input[type='password'] {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 15px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 1rem;
+	transition: border-color 0.3s ease-in-out;
+	box-sizing: border-box;
+}
+
+input[type='text']:focus,
+input[type='password']:focus {
+	border-color: #007bff;
+	outline: none;
+}
+
+input[type='submit'] {
+	background-color: #007bff;
+	color: #fff;
+	padding: 10px 15px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 1rem;
+	width: 100%;
+	transition: background-color 0.3s ease-in-out;
+	box-sizing: border-box;
+}
+
+input[type='submit']:hover {
+	background-color: #0056b3;
+}
+
+/* Animations */
+@keyframes fadeIn {
+	from {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes slideDown {
+	from {
+		opacity: 0;
+		transform: translateY(-50px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

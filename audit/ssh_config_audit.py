@@ -214,7 +214,7 @@ class SSHConfigAudit:
             return "Password expiration is more than 365 days."
 
     def are_all_users_last_password_change_dates_in_past(self) -> bool:
-        cmd = "change -l $(awk -F: '($3>=1000){print $1}' /etc/passwd | xargs)"
+        cmd = "chage -l $(awk -F: '($3>=1000){print $1}' /etc/passwd | xargs)"
         stdout, stderr = self._shellexec(cmd)
         if stderr:
             raise Exception(
