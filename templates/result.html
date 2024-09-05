@@ -5,6 +5,22 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Audit Results</title>
 		<style>
+			.result-block {
+				margin-bottom: 30px;
+				padding: 20px;
+				border: 1px solid #ccc;
+				background-color: #f9f9f9;
+			}
+
+			.hostname-title {
+				font-size: 18px;
+				font-weight: bold;
+			}
+
+			.result-entry {
+				margin: 5px 0;
+			}
+
 			/* Spinner styles */
 			.spinner {
 				display: none;
@@ -51,29 +67,67 @@
 		<h1>Audit Results</h1>
 
 		<div id="results">
-			<!-- Display the audit results here -->
-			{% if results.error %}
-			<p>Error: {{ results.error }}</p>
-			{% else %}
-			<p>{{ results.sshd_config }}</p>
-			<p>{{ results.ssh_no_auth }}</p>
-			<p>{{ results.ssh_protocol2 }}</p>
-			<p>{{ results.empty_password_disabled }}</p>
-			<p>{{ results.cramfs_disabled }}</p>
-			<p>{{ results.is_squashfs_disabled }}</p>
-			<p>{{ results.is_udf_disabled }}</p>
-			<p>{{ results.tmp_partition }}</p>
-			<p>{{ results.password_rotation_configured }}</p>
-			<p>{{ results.password_expiration }}</p>
-			<p>{{ results.users_last_password_change_date }}</p>
-			<p>{{ results.system_accounts_secured }}</p>
-			<p>{{ results.file_access }}</p>
-			<p>{{ results.bootloader_password }}</p>
-			<p>{{ results.firewall }}</p>
-			<p>{{ results.auditd }}</p>
-			<p>{{ results.login_logout }}</p>
-			<p>{{ results.password_delay }}</p>
-			{% endif %}
+			<!-- Loop through the results for each host and display them -->
+			{% for result in all_results %}
+			<div class="result-block">
+				<div class="hostname-title">
+					Audit Results for Host: {{ result.hostname }}
+				</div>
+
+				<div class="result-entry">
+					SSH Config Disabled: {{ result.sshd_config }}
+				</div>
+				<div class="result-entry">
+					SSH Password Authentication Disabled: {{ result.ssh_no_auth
+					}}
+				</div>
+				<div class="result-entry">
+					SSH Protocol Set to 2: {{ result.ssh_protocol2 }}
+				</div>
+				<div class="result-entry">
+					Empty Passwords Disabled: {{ result.empty_password_disabled
+					}}
+				</div>
+				<div class="result-entry">
+					CRAMFS Disabled: {{ result.cramfs_disabled }}
+				</div>
+				<div class="result-entry">
+					SquashFS Disabled: {{ result.is_squashfs_disabled }}
+				</div>
+				<div class="result-entry">
+					UDF Disabled: {{ result.is_udf_disabled }}
+				</div>
+				<div class="result-entry">
+					TMP Partition: {{ result.tmp_partition }}
+				</div>
+				<div class="result-entry">
+					Password Rotation Configured: {{
+					result.password_rotation_configured }}
+				</div>
+				<div class="result-entry">
+					Password Expiration Configured: {{
+					result.password_expiration }}
+				</div>
+				<div class="result-entry">
+					File Access Logging: {{ result.file_access }}
+				</div>
+				<div class="result-entry">
+					Bootloader Password Set: {{ result.bootloader_password }}
+				</div>
+				<div class="result-entry">
+					Firewall Installed: {{ result.firewall }}
+				</div>
+				<div class="result-entry">
+					Auditd Installed: {{ result.auditd }}
+				</div>
+				<div class="result-entry">
+					Login/Logout Audits Enabled: {{ result.login_logout }}
+				</div>
+				<div class="result-entry">
+					Password Change Delay: {{ result.password_delay }}
+				</div>
+			</div>
+			{% endfor %}
 		</div>
 
 		<script>

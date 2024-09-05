@@ -213,29 +213,29 @@ class SSHConfigAudit:
         else:
             return "Password expiration is more than 365 days."
 
-    def are_all_users_last_password_change_dates_in_past(self) -> bool:
-        cmd = "chage -l $(awk -F: '($3>=1000){print $1}' /etc/passwd | xargs)"
-        stdout, stderr = self._shellexec(cmd)
-        if stderr:
-            raise Exception(
-                f"Error checking users' last password change dates on {self.hostname}: {stderr}"
-            )
-        if "never" not in stdout.lower():
-            return "No users last password change dates found."
-        else:
-            return "All users' last password change dates are in the past."
+    # def are_all_users_last_password_change_dates_in_past(self) -> bool:
+    #     cmd = "chage -l $(awk -F: '($3>=1000){print $1}' /etc/passwd | xargs)"
+    #     stdout, stderr = self._shellexec(cmd)
+    #     if stderr:
+    #         raise Exception(
+    #             f"Error checking users' last password change dates on {self.hostname}: {stderr}"
+    #         )
+    #     if "never" not in stdout.lower():
+    #         return "No users last password change dates found."
+    #     else:
+    #         return "All users' last password change dates are in the past."
 
-    def are_system_accounts_secured(self) -> bool:
-        cmd = "awk -F: '($3<1000){print $1}' /etc/passwd | xargs -n1 chage -l"
-        stdout, stderr = self._shellexec(cmd)
-        if stderr:
-            raise Exception(
-                f"Error checking system accounts security on {self.hostname}: {stderr}"
-            )
-        return "password must be changed" not in stdout.lower()
+    # def are_system_accounts_secured(self) -> bool:
+    #     cmd = "awk -F: '($3<1000){print $1}' /etc/passwd | xargs -n1 chage -l"
+    #     stdout, stderr = self._shellexec(cmd)
+    #     if stderr:
+    #         raise Exception(
+    #             f"Error checking system accounts security on {self.hostname}: {stderr}"
+    #         )
+    #     return "password must be changed" not in stdout.lower()
 
-    def close(self):
-        self.client.close()
+    # def close(self):
+    #     self.client.close()
 
 
 def interpret_result(result_code: int, check_name: str) -> str:
