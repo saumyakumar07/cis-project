@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, make_response
 from audit.ssh_config_audit import SSHConfigAudit
 import json
+import weasyprint
+from datetime import datetime
+
 
 app = Flask(__name__)
 
@@ -51,7 +54,6 @@ def index():
                     "password_delay": ssh_audit.audit_password_change_minimum_delay(),
                     "default_root_gid_0": ssh_audit.is_default_group_for_root_gid_0(),
                     "umask_027": ssh_audit.is_default_user_umask_027_or_more_restrictive(),
-                    # "user_shell_timeout_900": ssh_audit.is_default_user_shell_timeout_900_seconds_or_less(),
                     "is_passwd_permission_configured": ssh_audit.are_permissions_on_etc_passwd_configured(),
                     "is_passwd_dash_permission_configured": ssh_audit.are_permissions_on_etc_passwd_dash_configured(),
                     "is_group_permission_configured": ssh_audit.are_permissions_on_etc_group_configured(),
@@ -74,6 +76,28 @@ def index():
 
             # Render the template as HTML
             rendered_html = render_template("result.html", all_results=all_results)
+
+            # Check if the user wants to download the result as a PDF
+            if request.form.get("download_pdf"):
+                try:
+                    # Convert the rendered HTML to PDF using WeasyPrint
+                    pdf = weasyprint.HTML(string=rendered_html).write_pdf()
+
+                    now = datetime.now()
+                    formatted_date_time = now.strftime("%Y-%m-%d %H:%M:%S")
+
+                    # Create a response object with PDF data
+                    response = make_response(pdf)
+                    response.headers["Content-Type"] = "application/pdf"
+                    response.headers["Content-Disposition"] = (
+                        f"attachment; filename=report-{formatted_date_time}.pdf"
+                    )
+                    return response
+                except Exception as e:
+                    print("PDF Generation Error:", e)
+                    return render_template(
+                        "result.html", error="Failed to generate PDF."
+                    )
 
             return rendered_html
 
