@@ -109,6 +109,131 @@ class SSHConfigAudit:
 
         return interpret_result(state, "Password change minimum delay")
 
+    def is_password_authentication_disabled(self) -> bool:
+        cmd = "grep -i 'PasswordAuthentication' /etc/ssh/sshd_config"
+        stdout, stderr = self._shellexec(cmd)
+        if stderr:
+            raise Exception(f"Error checking sshd_config on {self.hostname}: {stderr}")
+        if "PasswordAuthentication no" in stdout:
+            return "PasswordAuthentication is disabled."
+
+        else:
+            return "PasswordAuthentication is enabled."
+
+    def is_ssh_protocol_set_to_2(self) -> bool:
+        cmd = "grep -i 'Protocol' /etc/ssh/sshd_config"
+        stdout, stderr = self._shellexec(cmd)
+        if stderr:
+            raise Exception(f"Error checking sshd_config on {self.hostname}: {stderr}")
+
+        if "Protocol 2" in stdout:
+            return "Protocol 2 is set."
+        else:
+            return "Protocol 2 is not set."
+
+    def is_empty_passwords_disabled(self) -> bool:
+        cmd = "grep -i 'PermitEmptyPasswords' /etc/ssh/sshd_config"
+        stdout, stderr = self._shellexec(cmd)
+        if stderr:
+            raise Exception(f"Error checking sshd_config on {self.hostname}: {stderr}")
+
+        if "PermitEmptyPasswords no" in stdout:
+            return "Empty passwords are disabled."
+        else:
+            return "Empty passwords are enabled."
+
+    def is_cramfs_disabled(self) -> bool:
+        cmd = "grep -i 'cramfs' /etc/fstab"
+        stdout, stderr = self._shellexec(cmd)
+        if stderr:
+            raise Exception(f"Error checking /etc/fstab on {self.hostname}: {stderr}")
+        if not stdout:
+            return "cramfs is not in /etc/fstab"
+        else:
+            return "cramfs is in /etc/fstab"
+
+    def is_squashfs_disabled(self) -> bool:
+        cmd = "grep -i 'squashfs' /etc/fstab"
+        stdout, stderr = self._shellexec(cmd)
+        if stderr:
+            raise Exception(f"Error checking /etc/fstab on {self.hostname}: {stderr}")
+        if not stdout:
+            return "squashfs is not in /etc/fstab"
+        else:
+            return "squashfs is in /etc/fstab"
+
+    def is_udf_disabled(self) -> bool:
+        cmd = "grep -i 'udf' /etc/fstab"
+        stdout, stderr = self._shellexec(cmd)
+        if stderr:
+            raise Exception(f"Error checking /etc/fstab on {self.hostname}: {stderr}")
+        if not stdout:
+            return "udf is not in /etc/fstab"
+        else:
+            return "udf is in /etc/fstab"
+
+    def is_tmp_partition(self) -> bool:
+        cmd = "df -h | grep '/tmp'"
+        stdout, stderr = self._shellexec(cmd)
+        if stderr:
+            raise Exception(
+                f"Error checking /tmp partition on {self.hostname}: {stderr}"
+            )
+        if not stdout:
+            return "No /tmp partition found"
+        else:
+            return "/tmp partition found"
+
+    def is_minimum_days_between_password_changes_configured(self) -> bool:
+        cmd = "grep '^PASS_MIN_DAYS' /etc/login.defs"
+        stdout, stderr = self._shellexec(cmd)
+        if stderr:
+            raise Exception(
+                f"Error checking minimum days between password changes on {self.hostname}: {stderr}"
+            )
+        if not stdout:
+            return "PASS_MIN_DAYS not found in /etc/login.defs. So password change minimum delay is not configured."
+        else:
+            return "PASS_MIN_DAYS found in /etc/login.defs. So password change minimum delay is configured."
+
+    def is_password_expiration_365_days_or_less(self) -> bool:
+        cmd = "grep '^PASS_MAX_DAYS' /etc/login.defs"
+        stdout, stderr = self._shellexec(cmd)
+        if stderr:
+            raise Exception(
+                f"Error checking password expiration on {self.hostname}: {stderr}"
+            )
+        try:
+            days = int(stdout.strip().split()[1])
+        except ValueError:
+            return False
+
+        if days <= 365:
+            return "Password expiration is 365 days or less."
+        else:
+            return "Password expiration is more than 365 days."
+
+    def are_all_users_last_password_change_dates_in_past(self) -> bool:
+        cmd = "change -l $(awk -F: '($3>=1000){print $1}' /etc/passwd | xargs)"
+        stdout, stderr = self._shellexec(cmd)
+        if stderr:
+            raise Exception(
+                f"Error checking users' last password change dates on {self.hostname}: {stderr}"
+            )
+        if "never" not in stdout.lower():
+            return "No users last password change dates found."
+        else:
+            return "All users' last password change dates are in the past."
+
+    def are_system_accounts_secured(self) -> bool:
+        cmd = "awk -F: '($3<1000){print $1}' /etc/passwd | xargs -n1 chage -l"
+        stdout, stderr = self._shellexec(cmd)
+        if stderr:
+            raise Exception(
+                f"Error checking system accounts security on {self.hostname}: {stderr}"
+            )
+        return "password must be changed" not in stdout.lower()
+
     def close(self):
         self.client.close()
 

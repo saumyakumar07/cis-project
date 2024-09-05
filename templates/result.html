@@ -55,7 +55,18 @@
 			{% if results.error %}
 			<p>Error: {{ results.error }}</p>
 			{% else %}
-			<p>{{ results.root_login }}</p>
+			<p>{{ results.sshd_config }}</p>
+			<p>{{ results.ssh_no_auth }}</p>
+			<p>{{ results.ssh_protocol2 }}</p>
+			<p>{{ results.empty_password_disabled }}</p>
+			<p>{{ results.cramfs_disabled }}</p>
+			<p>{{ results.is_squashfs_disabled }}</p>
+			<p>{{ results.is_udf_disabled }}</p>
+			<p>{{ results.tmp_partition }}</p>
+			<p>{{ results.password_rotation_configured }}</p>
+			<p>{{ results.password_expiration }}</p>
+			<p>{{ results.users_last_password_change_date }}</p>
+			<p>{{ results.system_accounts_secured }}</p>
 			<p>{{ results.file_access }}</p>
 			<p>{{ results.bootloader_password }}</p>
 			<p>{{ results.firewall }}</p>
