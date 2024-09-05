@@ -3,14 +3,13 @@
 .main-container {
 	display: flex;
 	justify-content: center; /* Centers horizontally */
-	align-items: center;     /* Centers vertically */
+	align-items: center; /* Centers vertically */
 	height: 100vh; /* Full screen height */
 	background-size: cover; /* Ensures the image covers the entire container */
 	background-position: center; /* Centers the image */
 	background-repeat: no-repeat; /* Prevents image repetition */
-	background-image: url('./WhatsApp\ Image\ 2024-09-05\ at\ 10.19.32\ PM.jpeg');
+	background-image: url('/static/bg.jpeg');
 }
-
 
 /* Style for the old box (Audit form) */
 .form-container {
@@ -91,18 +90,15 @@ button:hover {
 	background-color: #0056b3;
 }
 
-
-.added-host-container{
-	padding: 12px 24px ;
+.added-host-container {
+	padding: 12px 24px;
 	background-color: #fff;
 	display: flex;
 	flex-direction: column;
 	gap: 8px;
-	
-	
 }
 
-.added-host-container	h2{
+.added-host-container h2 {
 	padding-bottom: 12px;
 	border-bottom: 1px solid gray;
 }

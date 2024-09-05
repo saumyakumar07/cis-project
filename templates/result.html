@@ -30,8 +30,7 @@
 			/* General Styles */
 			body {
 				font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-				background: url('/static/gradient-wireframe-background_23-2148993324.avif')
-					no-repeat center center fixed;
+				background: url('/static/bg.jpeg') no-repeat center center fixed;
 				background-size: cover; /* Ensures the background image covers the entire screen */
 				margin: 0;
 				padding: 20px;
@@ -82,6 +81,12 @@
 			#results p.success {
 				color: #2ecc71;
 			}
+			.result-entry.red {
+				background: #ff7f7f;
+			}
+			.result-entry.green {
+				background: #7fff7f;
+			}
 		</style>
 	</head>
 	<body>
@@ -100,8 +105,9 @@
 				</div>
 				<hr />
 
-				<div class="result-entry">
-					SSH Config Disabled: {{ result.sshd_config }}
+				<div class="result-entry {{ result.sshd_config.color }}">
+					<span></span>SSH Config Disabled: {{
+					result.sshd_config.message }}
 				</div>
 				<div class="result-entry">
 					SSH Password Authentication Disabled: {{ result.ssh_no_auth
