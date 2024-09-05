@@ -31,6 +31,7 @@ def index():
 
                 # Collect audit results for each host
                 results = {
+                    "username": username,
                     "hostname": hostname,
                     "sshd_config": ssh_audit.is_root_login_disabled_message(),
                     "ssh_no_auth": ssh_audit.is_password_authentication_disabled(),
@@ -53,6 +54,8 @@ def index():
                 all_results.append(results)
 
             # Pass the collected results for each host to the results template
+            print("All Results:", all_results)
+            # ssh_audit.close()
             return render_template("result.html", all_results=all_results)
 
         except json.JSONDecodeError as e:
