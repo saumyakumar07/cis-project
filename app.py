@@ -48,7 +48,6 @@ def index():
                     "firewall": ssh_audit.is_firewall_installed_message(),
                     "auditd": ssh_audit.is_package_installed("auditd"),
                     "login_logout": ssh_audit.audit_events_for_login_and_logout_are_collected(),
-                    "password_delay": ssh_audit.audit_password_change_minimum_delay(),
                 }
 
                 all_results.append(results)
@@ -70,3 +69,33 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+# assword_delay": ssh_audit.audit_password_change_minimum_delay(),
+#                     "default_root_gid_0": ssh_audit.is_default_group_for_root_gid_0(),
+#                     "umask_027": ssh_audit.is_default_user_umask_027_or_more_restrictive(),
+#                     "user_shell_timeout_900": ssh_audit.is_default_user_shell_timeout_900_seconds_or_less(),
+#                     "is_passwd_permission_configured": ssh_audit.are_permissions_on_etc_passwd_configured(),
+#                     "is_passwd_dash_permission_configured": ssh_audit.are_permissions_on_etc_passwd_dash_configured(),
+#                     "is_group_permission_configured": ssh_audit.are_permissions_on_etc_group_configured(),
+#                     "": ssh_audit.are_permissions_on_etc_group_dash_configured(),
+#                     "is_shadow_permission_configured": ssh_audit.are_permissions_on_etc_shadow_configured(),
+#                     "is_shadow_dash_permission_configured": ssh_audit.are_permissions_on_etc_shadow_dash_configured(),
+#                     "is_gshadow_permission_configured": ssh_audit.are_permissions_on_etc_gshadow_configured(),
+#                     "": ssh_audit.are_permissions_on_etc_gshadow_dash_configured(),
+#                     "no_world_writable_files": ssh_audit.are_no_world_writable_files(),
+#                     "": ssh_audit.are_etc_shadow_password_fields_not_empty(),
+#                     "": ssh_audit.do_all_groups_in_passwd_exist_in_group(),
+#                     "shadow_group_empty": ssh_audit.is_shadow_group_empty(),
+#                     "no_duplicate_uids": ssh_audit.are_no_duplicate_uids(),
+#                     "no_duplicate_gids": ssh_audit.are_no_duplicate_gids(),
+#                     "no_duplicate_unames": ssh_audit.are_no_duplicate_user_names(),
+#                     "no_duplicate_groups": ssh_audit.are_no_duplicate_group_names(),
+#                     "root_path_integrity": ssh_audit.is_root_path_integrity_ensured(),
+#                     "root_uid_0": ssh_audit.is_root_the_only_uid_0_account(),
+#                     "local_interactive_user_home": ssh_audit.do_local_interactive_user_home_directories_exist(),
+#                     "local_interactive_own_home": ssh_audit.do_local_interactive_users_own_their_home_directories(),
+#                     "home_dir_750": ssh_audit.are_local_interactive_user_home_directories_mode_750_or_more_restrictive(),
+#                     "no_netrc_files": ssh_audit.do_local_interactive_users_have_no_netrc_files(),
+#                     "no_forward_files": ssh_audit.do_local_interactive_users_have_no_forward_files(),
+#                     "no_rhosts_files": ssh_audit.do_local_interactive_users_have_no_rhosts_files(),
+#                     "are_world_writeable_files": ssh_audit.are_local_interactive_user_dot_files_not_group_or_world_writable(),

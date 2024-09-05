@@ -152,6 +152,21 @@
 				<div class="result-entry">
 					Password Change Delay: {{ result.password_delay }}
 				</div>
+				<div class="result-entry">
+					Default Group for root Gid 0: {{ result.default_root_gid_0
+					}}
+				</div>
+				<div class="result-entry">
+					Default User umask 027: {{ result.umask_027 }}
+				</div>
+
+				<!-- <div class="result-entry">
+					: {{ result.user_shell_timeout_900 }}
+				</div>
+				<div class="result-entry">
+					Group grid: {{ result.is_passwd_permission_configured }}
+				</div> -->
+
 				{% endfor %}
 			</div>
 		</div>
