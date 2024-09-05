@@ -1,107 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>AuditRite</title>
-		<link
-			rel="stylesheet"
-			type="text/css"
-			href="{{ url_for('static', filename='styles.css') }}"
-		/>
-		<script>
-			// Initialize an empty array to store credentials
-			let credentialsArray = [];
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>AuditRite</title>
+	<link
+		rel="stylesheet"
+		type="text/css"
+		href="{{ url_for('static', filename='styles.css') }}"
+	/>
+	<script>
+		// Initialize an empty array to store credentials
+		let credentialsArray = [];
 
-			// Function to add credentials to the array
-			function addEntry() {
-				console.log('addEntry function called');
+		// Function to add credentials to the array
+		function addEntry() {
+			console.log('addEntry function called');
 
-				const hostname = document
-					.getElementById('hostname')
-					.value.trim();
-				const username = document
-					.getElementById('username')
-					.value.trim();
-				const password = document
-					.getElementById('password')
-					.value.trim();
+			const hostname = document
+				.getElementById('hostname')
+				.value.trim();
+			const username = document
+				.getElementById('username')
+				.value.trim();
+			const password = document
+				.getElementById('password')
+				.value.trim();
 
-				console.log('Input Values:', { hostname, username, password });
+			console.log('Input Values:', { hostname, username, password });
 
-				if (hostname && username && password) {
-					credentialsArray.push({ hostname, username, password });
-					console.log('Credentials Array:', credentialsArray);
+			const markup = `
+			<div>	
+				<div>
+				- ${hostname}(${username})
+				</div>  	
+				
+			
+					
+			</div>  
+			`
 
-					// Clear the input fields
-					document.getElementById('hostname').value = '';
-					document.getElementById('username').value = '';
-					document.getElementById('password').value = '';
 
-					alert('Credentials added! You can add more.');
-				} else {
-					alert('Please fill out all fields!');
-				}
+			document.querySelector('.added-host-container').innerHTML += markup;
+
+			if (hostname && username && password) {
+				credentialsArray.push({ hostname, username, password });
+				console.log('Credentials Array:', credentialsArray);
+
+				// Clear the input fields
+				document.getElementById('hostname').value = '';
+				document.getElementById('username').value = '';
+				document.getElementById('password').value = '';
+
+				alert('Credentials added! You can add more.');
+			} else {
+				alert('Please fill out all fields!');
+			}
+		}
+
+		// Function to submit the form with the credentials array
+		function submitForm() {
+			console.log('submitForm function called');
+
+			if (credentialsArray.length === 0) {
+				alert(
+					'Please add at least one set of credentials before submitting.'
+				);
+				return;
 			}
 
-			// Function to submit the form with the credentials array
-			function submitForm() {
-				console.log('submitForm function called');
+			const form = document.getElementById('auditForm');
+			const credentialsInput =
+				document.getElementById('credentialsInput');
 
-				if (credentialsArray.length === 0) {
-					alert(
-						'Please add at least one set of credentials before submitting.'
-					);
-					return;
-				}
-
-				const form = document.getElementById('auditForm');
-				const credentialsInput =
-					document.getElementById('credentialsInput');
-
-				if (!form) {
-					console.error(
-						'Form element with id "auditForm" not found.'
-					);
-					alert('Internal error: Form not found.');
-					return;
-				}
-
-				if (!credentialsInput) {
-					console.error(
-						'Hidden input with id "credentialsInput" not found.'
-					);
-					alert('Internal error: Hidden input not found.');
-					return;
-				}
-
-				// Convert the credentials array to a JSON string
-				credentialsInput.value = JSON.stringify(credentialsArray);
-				console.log('Submitting Credentials:', credentialsInput.value);
-
-				// Submit the form
-				form.submit();
+			if (!form) {
+				console.error(
+					'Form element with id "auditForm" not found.'
+				);
+				alert('Internal error: Form not found.');
+				return;
 			}
 
-			// Optional: Prevent form submission via Enter key to ensure buttons are used
-			document.addEventListener('DOMContentLoaded', () => {
-				const form = document.getElementById('auditForm');
-				if (form) {
-					form.addEventListener('submit', function (event) {
-						event.preventDefault(); // Prevent default form submission
-						submitForm(); // Call the custom submit function
-					});
-				}
-			});
-		</script>
-	</head>
-	<body>
-		<div class="background-container"></div>
-		<img
-			src="{{ url_for('static', filename='gradient-wireframe-background_23-2148993324.avif') }}"
-			alt="My AVIF Image"
-		/>
+			if (!credentialsInput) {
+				console.error(
+					'Hidden input with id "credentialsInput" not found.'
+				);
+				alert('Internal error: Hidden input not found.');
+				return;
+			}
 
+			// Convert the credentials array to a JSON string
+			credentialsInput.value = JSON.stringify(credentialsArray);
+			console.log('Submitting Credentials:', credentialsInput.value);
+
+			// Submit the form
+			form.submit();
+		}
+
+		// Optional: Prevent form submission via Enter key to ensure buttons are used
+		document.addEventListener('DOMContentLoaded', () => {
+			const form = document.getElementById('auditForm');
+			if (form) {
+				form.addEventListener('submit', function (event) {
+					event.preventDefault(); // Prevent default form submission
+					submitForm(); // Call the custom submit function
+				});
+			}
+		});
+	</script>
+</head>
+<body>
+	<!-- Container to hold the old box -->
+	<div class="main-container">
+		<!-- Updated Old Box (Centered in the middle) -->
 		<div class="form-container">
 			<h1>AuditRite</h1>
 			<form id="auditForm" method="POST" action="/">
@@ -128,14 +139,24 @@
 					name="password"
 					required
 				/><br /><br />
-				<input type="checkbox" name="download_pdf" /> Download as PDF
 
-				<button type="button" onclick="addEntry()">Add</button>
-				<button type="button" onclick="submitForm()">Submit</button>
+				<!-- New Checkbox Button -->
+				<input type="checkbox" name="download_pdf" /> Download as PDF<br /><br />
+
+				<!-- Button Container to hold both Add and Submit buttons on the same line -->
+				<div class="button-container">
+					<button type="button" onclick="addEntry()">Add</button>
+					<button type="button" onclick="submitForm()">Submit</button>
+				</div>
 
 				<!-- Hidden input to store the credentials array -->
 				<input type="hidden" id="credentialsInput" name="credentials" />
 			</form>
 		</div>
-	</body>
+
+		<div class="added-host-container">
+                       <h2>Your added host's</h2>
+		</div>
+	</div>
+</body>
 </html>
